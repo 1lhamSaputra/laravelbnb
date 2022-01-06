@@ -5,17 +5,19 @@
             <div class="container">
                 <div class="row mb-4" v-for="row in rows" :key="`row${row}`">
                     <div
-                        class="col"
+                        class="col d-flex align-items-stretch"
                         v-for="(bookable, column) in bookableInRow(row)"
                         :key="`row${row + column}`"
                     >
                         <bookable-list-item
-                            :item-title="bookable.title"
-                            :item-content="bookable.content"
-                            :price="10000"
+                            v-bind="bookable"
                         ></bookable-list-item>
                     </div>
-                    <div class="col" v-for="p in placeholderInRow(row)" :key="p"></div>
+                    <div
+                        class="col"
+                        v-for="p in placeholderInRow(row)"
+                        :key="p"
+                    ></div>
                 </div>
             </div>
         </div>
@@ -51,46 +53,16 @@ export default {
             );
         },
         placeholderInRow(row) {
-            return this.columns - this.bookableInRow(row).length
-        }
+            return this.columns - this.bookableInRow(row).length;
+        },
     },
     mounted() {
         this.loading = true;
-        setTimeout(() => {
-            this.bookables = [
-                {
-                    title: "Cheap Villa",
-                    content: "a very cheap villa",
-                },
-                {
-                    title: "Cheap Villa 2",
-                    content: "a very cheap villa 2",
-                },
-                {
-                    title: "Cheap Villa 2",
-                    content: "a very cheap villa 2",
-                },
-                {
-                    title: "Cheap Villa 2",
-                    content: "a very cheap villa 2",
-                },
-                {
-                    title: "Cheap Villa 2",
-                    content: "a very cheap villa 2",
-                },
-                {
-                    title: "Cheap Villa 2",
-                    content: "a very cheap villa 2",
-                },
-                {
-                    title: "Cheap Villa 2",
-                    content: "a very cheap villa 2",
-                },
-            ];
-            this.loading = false;
 
-            console.log(this.rows);
-        }, 2000);
+        axios.get("/api/bookables").then((res) => {
+            this.bookables = res.data.data;
+            this.loading = false;
+        });
     },
 };
 </script>
