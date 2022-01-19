@@ -15,4 +15,12 @@ class Review extends Model
     {
         return 'string';
     }
+
+    public function bookable(){
+        return $this->belongsTo(Bookable::class);
+    }
+
+    public function booking(){
+        return $this->belongsTo(Booking::class);
+    }
 }
